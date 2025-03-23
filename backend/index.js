@@ -5,6 +5,7 @@ const passport = require("passport");
 const User = require("./models/User");
 const authRoutes = require("./routes/auth");
 const songRoutes = require("./routes/song");
+const playlistRoutes = require("./routes/playlist");
 
 
 const port = 8000;
@@ -16,7 +17,7 @@ app.use(express.json());
 require("dotenv").config();
 
 mongoose.connect(
-        "mongodb+srv://newer:" +
+        "mongodb+srv://Jeevant:" +
         process.env.MONGO_PASSWORD +
         "@cluster0.afxf5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
         {}
@@ -34,17 +35,17 @@ let opts = {}
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = "supposedtobesecret";
 
-passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-    User.findOne({ _id: jwt_payload.sub}, function(err, user) {
-        if (err) {
-            return done(err, false);
-        }
+passport.use(new JwtStrategy(opts, async function(jwt_payload, done) {
+    try {
+        const user = await User.findOne({ _id: jwt_payload.sub });
         if (user) {
             return done(null, user);
         } else {
             return done(null, false);
         }
-    });
+    } catch (err) {
+        return done(err, false);
+    }
 }));
 
 
@@ -53,11 +54,11 @@ passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
 app.get("/",(req,res) => {
     res.send("Hello , World!");
 
-});
+}); 
 
 app.use("/auth", authRoutes);
 app.use("/song", songRoutes);
-
+app.use("/playlist", playlistRoutes);
 
 app.listen(port , () => {
     console.log("App is running on port : " + port);

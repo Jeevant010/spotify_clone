@@ -2,7 +2,7 @@ const express = require("express");
 const passport = require("passport");
 const router = express.Router();
 const Song = require("../models/Song")
-
+const User = require("../models/User");
 
 router.post("/create", passport.authenticate("jwt", {session : false}),
  async (req,res) => {
@@ -20,14 +20,39 @@ router.post("/create", passport.authenticate("jwt", {session : false}),
     return res.status(200).json(createdSong);
 });
 
-router.get("/get/mysongs", passport.authenticate("jwt" , {session : false}) ,
-async (req, res) => {
-    const currentUser = req.user;
+router.get("/get/mysongs", passport.authenticate("jwt" , {session : false}) 
+, async (req, res) => {
+    
     const songs = await Song.find({ artist : req.user._id });
-    return res.status(200).json({ data : songs })
+    return res.status(200).json({ data : songs });
 
 });
 
 
+router.get("/get/artist/:artistId", passport.authenticate("jwt" , {session : false}) 
+, async (req, res) => {
+    
+    const { artistId } = req.params;
+
+    const artist = await User.find({ _id : artistId });
+    if( !artist ) {
+        return res.status(301).json( { err : "Artist does not exist" });
+    }
+
+    const songs = await Song.find({ artist : artistId });
+    return res.status(200).json({ data : songs });
+
+});
+
+router.get("get/songname/:SongName", passport.authenticate("jwt" , {session : false})
+, async (req, res) => {
+    const { songName } = req.params;
+
+    const song = await Song.find({ name : songName });
+    if( !song ) {
+        return res.status(301).json( { err : "Song does not exist" });
+    }
+    return res.status(200).json({ data : song });
+});
 
 module.exports = router;
