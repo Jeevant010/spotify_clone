@@ -28,7 +28,7 @@ router.post("/create", passport.authenticate("jwt", {session : false}),
 
     router.get("/get/playlist/:playlistId", passport.authenticate("jwt", {session : false}),
     async (req, res) => {
-        const { playlistId } = req.params.playlistId;
+        const { playlistId } = req.params;
         const playlist = await Playlist.findOne({ _id : playlistId });
         if (!playlist) {
             return res.status(301).json({ err: "Playlist does not exist." });
@@ -37,7 +37,7 @@ router.post("/create", passport.authenticate("jwt", {session : false}),
         }
     );
 
-    router.get("/get/atist/:artistId", passport.authenticate("jwt", {session : false}),
+    router.get("/get/artist/:artistId", passport.authenticate("jwt", {session : false}),
     async (req, res) => {
         const artistId = req.params.artistId;
 
@@ -63,7 +63,7 @@ router.post("/create", passport.authenticate("jwt", {session : false}),
             return res.status(304).json({ err: "Playlist does not exist." });
         }
 
-        if (playlist.owner != currentUser._id &&
+        if (!playlist.owner.equals(currentUser._id) &&
          !playlist.collaborators.includes(currentUser._id)) {
             return res.status(400).json({ err: "You do not have permission to add songs to this playlist." });
         }
@@ -77,7 +77,7 @@ router.post("/create", passport.authenticate("jwt", {session : false}),
         await playlist.save();
 
         return res.status(200).json({ playlist });
-        
+
     });
 
 module.exports = router;
