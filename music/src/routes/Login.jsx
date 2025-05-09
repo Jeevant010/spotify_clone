@@ -16,6 +16,10 @@ const Login = () => {
                  
             </div>
             <p>Please login to start</p>
+            <div>
+                next section
+            </div>
+
         </div>
         
         {/* <Icon></Icon> */}
