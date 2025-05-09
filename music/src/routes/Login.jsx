@@ -5,9 +5,6 @@ import React from 'react';
 // i will also add the css file for the component in the same folder as the component
 
 
-
-
-//consider changes
 const Login = () => {
     return (
     <div className='w-full h-full flex flex-col  items-center'>
@@ -16,6 +13,10 @@ const Login = () => {
                  
             </div>
             <p>Please login to start</p>
+            <div>
+                next section
+            </div>
+
         </div>
         
         {/* <Icon></Icon> */}
