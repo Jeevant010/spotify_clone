@@ -19,7 +19,6 @@ const Login = () => {
 
         </div>
         
-        {/* <Icon></Icon> */}
 
     </div>
     
