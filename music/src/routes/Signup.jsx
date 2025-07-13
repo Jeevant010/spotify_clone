@@ -1,12 +1,16 @@
-import React from 'react';
-// import Icon from '../components/Icon';
+import React, { useState } from 'react';
 import {Icon} from "@iconify/react";
 import TextInput from '../components/shared/TextInput';
 import PasswordInput from '../components/shared/PasswordInput';
 import {Link} from 'react-router-dom';
 
-
 const SignupComponent = () => {
+    const [email, setEmail] = useState("");
+    const [confirmEmail, setConfirmEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [Username, setUsername] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     return (
         <>
     <div className='w-full h-full flex flex-col  items-center'>
@@ -17,16 +21,50 @@ const SignupComponent = () => {
 
             <div className='font-bold mb-4'>Sign up for free  to start listening.</div>
             <TextInput 
-                label="Email address or username" 
-                placeholder="Email address or username"
-                className="my-2"
+                label="Email address" 
+                placeholder="Enter your Email address"
+                className="my-6"
+                value={email}
+                setValue={setEmail}
+            />
+            <TextInput 
+                label=" Confirm Email address" 
+                placeholder="Enter your Email again"
+                className="mb-6"
+                value={confirmEmail}
+                setValue={setConfirmEmail}
+            />
+            <TextInput 
+                label="Username" 
+                placeholder="Enter your Username"
+                className="mb-6"
+                
+                value={Username}
+                setValue={setUsername}
             />
             <PasswordInput
-                label="Password"
-                placeholder="password"
-                className="my-2"
+                label="Create Password"
+                placeholder="Enter a strong Password here"
+                value={password}
+                setValue={setPassword}
             />
-            <div className=' w-full flex items-center justify-end mt-6'>
+            <div className='w-full flex space-x-8'>
+                <TextInput 
+                label="First Name" 
+                placeholder="Enter your First Name"
+                className="my-6"
+                value={firstName}
+                setValue={setFirstName}
+            />
+            <TextInput 
+                label="Last Name" 
+                placeholder="Enter your Last Name"
+                className="my-6"
+                value={lastName}
+                setValue={setLastName}
+            />
+            </div>
+            <div className=' w-full flex items-center justify-center mt-6'>
             <button className='bg-green-400 font-semibold p-3 px-10 rounded-full '>
                 SIGN UP
             </button>

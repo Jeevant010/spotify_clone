@@ -8,7 +8,7 @@ const songRoutes = require("./routes/song");
 const playlistRoutes = require("./routes/playlist");
 
 
-const port = 8000;
+const port = 8000 ;
 
 const JwtStrategy = require('passport-jwt').Strategy,
     ExtractJwt = require('passport-jwt').ExtractJwt;

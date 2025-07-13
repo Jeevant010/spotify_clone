@@ -6,7 +6,7 @@ const IconText = ({iconName, displayText, active}) => {
             <div className="flex items-center justify-start cursor-pointer">
                 <div className='px-10 py-3'>
                     <Icon icon={iconName} color={active?'white':'gray'}
-                     fontSize={35}
+                     fontSize={25}
                     />
                 </div>
 
