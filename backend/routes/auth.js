@@ -7,7 +7,7 @@ const { getToken } = require("../utils/helpers");
 router.post("/register",async (req,res) => {
 
     const { email, password, firstName, lastName, userName } = req.body;
-    
+     
     if (!email || !password || !firstName || !lastName || !userName) {
         return res.status(400).json({ error: "All fields are required" });
     }
@@ -51,7 +51,7 @@ router.post("/login", async (req,res) => {
     }
 
     const token = await getToken(user.email, user);
-    const userToReturn = { ...newUser.toJSON(), token};
+    const userToReturn = { ...user.toJSON(), token};
     delete userToReturn.password;
     return res.status(200).json(userToReturn);
 

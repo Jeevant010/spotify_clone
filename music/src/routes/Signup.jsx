@@ -3,14 +3,37 @@ import {Icon} from "@iconify/react";
 import TextInput from '../components/shared/TextInput';
 import PasswordInput from '../components/shared/PasswordInput';
 import {Link} from 'react-router-dom';
+import { makeUnauthenticatedPOSTRequest } from '../utils/serverHelper';
 
 const SignupComponent = () => {
     const [email, setEmail] = useState("");
     const [confirmEmail, setConfirmEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [Username, setUsername] = useState("");
+    const [userName, setUserName] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
+
+    const signUp = async () => {
+        if(email !== confirmEmail){
+            alert(
+                "Email and confirm Email fields much match. Please check again"
+            );
+            return;
+        }
+        const data = { email, password, userName, firstName, lastName }
+        const response = await makeUnauthenticatedPOSTRequest(
+            "/auth/register",
+            data
+        );
+        if (response && !response.err && !response.error) {
+            alert("Success");
+
+        } else {
+            alert(response?.err || response?.error || "Registration failed");
+        }
+
+    };
+
     return (
         <>
     <div className='w-full h-full flex flex-col  items-center'>
@@ -39,8 +62,8 @@ const SignupComponent = () => {
                 placeholder="Enter your Username"
                 className="mb-6"
                 
-                value={Username}
-                setValue={setUsername}
+                value={userName}
+                setValue={setUserName}
             />
             <PasswordInput
                 label="Create Password"
@@ -65,7 +88,13 @@ const SignupComponent = () => {
             />
             </div>
             <div className=' w-full flex items-center justify-center mt-6'>
-            <button className='bg-green-400 font-semibold p-3 px-10 rounded-full '>
+            <button className='bg-green-400 font-semibold p-3 px-10 rounded-full '
+                onClick={ (e) => {
+                    e.preventDefault();
+                    signUp();
+                    }
+                }
+            >
                 SIGN UP
             </button>
             </div>

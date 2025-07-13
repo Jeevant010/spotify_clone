@@ -6,13 +6,14 @@ const User = require("./models/User");
 const authRoutes = require("./routes/auth");
 const songRoutes = require("./routes/song");
 const playlistRoutes = require("./routes/playlist");
-
+const cors = require("cors");
 
 const port = 8000 ;
 
 const JwtStrategy = require('passport-jwt').Strategy,
     ExtractJwt = require('passport-jwt').ExtractJwt;
 
+app.use(cors());
 app.use(express.json());
 require("dotenv").config();
 
