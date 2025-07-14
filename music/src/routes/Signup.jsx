@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import {useCookies} from 'react-cookie';
+import { useNavigate, Link } from 'react-router-dom';
 import {Icon} from "@iconify/react";
 import TextInput from '../components/shared/TextInput';
 import PasswordInput from '../components/shared/PasswordInput';
-import {Link} from 'react-router-dom';
 import { makeUnauthenticatedPOSTRequest } from '../utils/serverHelper';
 
 const SignupComponent = () => {
@@ -12,6 +13,9 @@ const SignupComponent = () => {
     const [userName, setUserName] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
+    const [cookie, setCookie] = useCookies(["token"]);
+    const navigate = useNavigate();
+
 
     const signUp = async () => {
         if(email !== confirmEmail){
@@ -26,7 +30,12 @@ const SignupComponent = () => {
             data
         );
         if (response && !response.err && !response.error) {
+            const token = response.token;
+            const date = new Date();
+            date.setDate(date.getDate() + 30);
+            setCookie("token", token, {path: "/" , expires: date});
             alert("Success");
+            navigate("/home");
 
         } else {
             alert(response?.err || response?.error || "Registration failed");
