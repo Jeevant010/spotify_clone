@@ -3,6 +3,7 @@ import IconText from '../components/shared/IconText';
 import { Icon } from '@iconify/react';
 import TextWithHover from '../components/shared/TextWithHover';
 import TextInput from '../components/shared/TextInput';
+import CloudinaryUpload from '../components/shared/CloudinaryUpload';
 
 const UploadSong = () => {
     return (
@@ -105,6 +106,9 @@ const UploadSong = () => {
                                     placeholder="Thumbnail"
                                 />
                             </div>
+                        </div>
+                        <div className='pt-5'>
+                            <CloudinaryUpload />
                         </div>
                     </div>
                 </div>
