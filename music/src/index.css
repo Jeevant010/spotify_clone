@@ -1,3 +1,49 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Quick load test: a plain global rule to verify index.css is actually applied */
+body {
+	font-family: 'Poppins', sans-serif;
+	background: #0b0b0b;
+	color: #e5e7eb;
+}
+
+/* Fallback utilities: constrain images when Tailwind utilities are unavailable */
+.content img,
+.pb-4 > img {
+	max-width: 320px;
+	width: 100%;
+	height: auto !important;
+	object-fit: cover;
+	display: block;
+	border-radius: 0.75rem;
+}
+
+/* ensure sidebar logo doesn't stretch */
+.logoDiv img {
+	max-width: 125px;
+	height: auto;
+}
+
+/* Core CSS variables used across the app (fallbacks if Tailwind theme vars missing) */
+:root {
+	--app-accent: #1db954; /* spotify green */
+	--app-surface: #121212;
+	--app-surface-2: #181818;
+	--app-card: #181818;
+	--app-card-hover: #282828;
+	--app-muted: #b3b3b3;
+}
+
+/* Small set of utility classes used in JS/JSX when Tailwind utilities are missing */
+.font-display {
+	font-family: 'Poppins', sans-serif;
+}
+
+/* Fallback heights used in a few components */
+.h-1\/10 { height: 10%; }
+.h-9\/10 { height: 90%; }
+
+/* Basic responsive container for content area */
+.content { box-sizing: border-box; }
