@@ -18,11 +18,11 @@ const CreatePlaylistModal = ({closeModal}) => {
 
     return (
         <div
-            className="absolute bg-black w-screen h-screen bg-opacity-50 flex justify-center items-center"
+            className="absolute bg-black w-screen h-screen bg-opacity-60 flex justify-center items-center z-50"
             onClick={closeModal}
         >
             <div
-                className="bg-app-black w-1/3 rounded-md p-8"
+                className="bg-[#282828] w-full max-w-md rounded-xl p-8"
                 onClick={(e) => {
                     e.stopPropagation();
                 }}
@@ -45,12 +45,12 @@ const CreatePlaylistModal = ({closeModal}) => {
                         value={playlistThumbnail}
                         setValue={setPlaylistThumbnail}
                     />
-                    <div
-                        className="bg-white w-1/3 rounded flex font-semibold justify-center items-center py-3 mt-4 cursor-pointer"
+                    <button
+                        className="bg-white w-1/2 rounded-full flex font-semibold justify-center items-center py-3 mt-4 cursor-pointer text-black"
                         onClick={createPlaylist}
                     >
                         Create
-                    </div>
+                    </button>
                 </div>
             </div>
         </div>
