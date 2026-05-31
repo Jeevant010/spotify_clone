@@ -1,4 +1,4 @@
-import "./output.css";
+import "./index.css";
 import {useState} from "react";
 import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import LoginComponent from "./routes/Login";
@@ -17,7 +17,7 @@ function App() {
     const [currentSong, setCurrentSong] = useState(null);
     const [soundPlayed, setSoundPlayed] = useState(null);
     const [isPaused, setIsPaused] = useState(true);
-    const [cookie, setCookie] = useCookies(["token"]);
+    const [cookie] = useCookies(["token"]);
 
     return (
         <div className="w-screen h-screen font-poppins">
@@ -35,7 +35,6 @@ function App() {
                         }}
                     >
                         <Routes>
-                            <Route path="/" element={<HelloComponent />} />
                             <Route
                                 path="/home"
                                 element={<LoggedInHomeComponent />}
@@ -68,8 +67,5 @@ function App() {
     );
 }
 
-const HelloComponent = () => {
-    return <div>This is hello from component</div>;
-};
 
 export default App;
