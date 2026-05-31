@@ -8,13 +8,30 @@ const SearchPage = () => {
     const [isInputFocused, setIsInputFocused] = useState(false);
     const [searchText, setSearchText] = useState("");
     const [songData, setSongData] = useState([]);
+    const [error, setError] = useState("");
+    const [isSearching, setIsSearching] = useState(false);
 
     const searchSong = async () => {
-        // This function will call the search api
-        const response = await makeAuthenticatedGETRequest(
-            "/song/get/songname/" + searchText
-        );
-        setSongData(response.data);
+        const query = searchText.trim();
+        if (!query) {
+            setSongData([]);
+            setError("");
+            return;
+        }
+        setIsSearching(true);
+        setError("");
+        try {
+            const response = await makeAuthenticatedGETRequest(
+                "/song/get/songname/" + query
+            );
+            setSongData(response?.data || []);
+            if (response?.err) {
+                setError(response.err);
+            }
+        } catch (e) {
+            setError("Search failed. Check your connection or backend.");
+        }
+        setIsSearching(false);
     };
 
     return (
@@ -47,7 +64,14 @@ const SearchPage = () => {
                         }}
                     />
                 </div>
-                {songData.length > 0 ? (
+                {error && (
+                    <div className="text-red-300 bg-red-500/10 border border-red-500/40 p-3 mt-6 rounded-lg text-sm">
+                        {error}
+                    </div>
+                )}
+                {isSearching ? (
+                    <div className="text-gray-400 pt-10">Searching...</div>
+                ) : songData.length > 0 ? (
                     <div className="pt-10 space-y-3">
                         <div className="text-white">
                             Showing search results for
@@ -58,14 +82,13 @@ const SearchPage = () => {
                                 <SingleSongCard
                                     info={item}
                                     key={JSON.stringify(item)}
-                                    playSound={() => {}}
                                 />
                             );
                         })}
                     </div>
                 ) : (
                     <div className="text-gray-400 pt-10">
-                        Nothing to show here.
+                        Start typing to search songs.
                     </div>
                 )}
             </div>
