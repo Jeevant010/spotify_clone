@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -15,10 +16,10 @@ const JwtStrategy = require('passport-jwt').Strategy,
 
 app.use(cors());
 app.use(express.json());
-require("dotenv").config();
+
 
 mongoose.connect(
-        "mongodb+srv://Jeevant:" +
+        "mongodb+srv://User:" +
         process.env.MONGO_PASSWORD +
         "@cluster0.afxf5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
         {}
