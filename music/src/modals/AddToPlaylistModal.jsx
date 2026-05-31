@@ -15,11 +15,11 @@ const AddToPlaylistModal = ({closeModal, addSongToPlaylist}) => {
 
     return (
         <div
-            className="absolute bg-black w-screen h-screen bg-opacity-50 flex justify-center items-center"
+            className="absolute bg-black w-screen h-screen bg-opacity-60 flex justify-center items-center z-50"
             onClick={closeModal}
         >
             <div
-                className="bg-app-black w-1/3 rounded-md p-8"
+                className="bg-[#282828] w-full max-w-md rounded-xl p-8"
                 onClick={(e) => {
                     e.stopPropagation();
                 }}
@@ -28,14 +28,21 @@ const AddToPlaylistModal = ({closeModal, addSongToPlaylist}) => {
                     Select Playlist
                 </div>
                 <div className="space-y-4 flex flex-col justify-center items-center">
-                    {myPlaylists.map((item) => {
-                        return (
-                            <PlaylistListComponent
-                                info={item}
-                                addSongToPlaylist={addSongToPlaylist}
-                            />
-                        );
-                    })}
+                    {myPlaylists.length === 0 ? (
+                        <div className="text-sm text-[var(--app-muted)]">
+                            No playlists found yet.
+                        </div>
+                    ) : (
+                        myPlaylists.map((item) => {
+                            return (
+                                <PlaylistListComponent
+                                    info={item}
+                                    addSongToPlaylist={addSongToPlaylist}
+                                    key={item._id}
+                                />
+                            );
+                        })
+                    )}
                 </div>
             </div>
         </div>
@@ -44,7 +51,7 @@ const AddToPlaylistModal = ({closeModal, addSongToPlaylist}) => {
 
 const PlaylistListComponent = ({info, addSongToPlaylist}) => {
     return (
-        <div className="bg-app-black w-full flex items-center space-x-4 hover:bg-gray-400 hover:bg-opacity-20 cursor-pointer p-3" onClick={()=>{
+        <div className="bg-[var(--app-surface-2)] w-full flex items-center space-x-4 hover:bg-white/10 cursor-pointer p-3 rounded-lg" onClick={()=>{
             addSongToPlaylist(info._id)
         }}>
             <div>
