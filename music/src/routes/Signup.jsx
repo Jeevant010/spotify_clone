@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {useCookies} from 'react-cookie';
-import { useNavigate, Link } from 'react-router-dom';
+import {useNavigate, Link} from 'react-router-dom';
 import {Icon} from "@iconify/react";
 import TextInput from '../components/shared/TextInput';
 import PasswordInput from '../components/shared/PasswordInput';
-import { makeUnauthenticatedPOSTRequest } from '../utils/serverHelper';
+import {makeUnauthenticatedPOSTRequest} from '../utils/serverHelper';
 
 const SignupComponent = () => {
     const [email, setEmail] = useState("");
@@ -13,115 +13,126 @@ const SignupComponent = () => {
     const [userName, setUserName] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [cookie, setCookie] = useCookies(["token"]);
+    const [, setCookie] = useCookies(["token"]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
     const navigate = useNavigate();
 
-
     const signUp = async () => {
-        if(email !== confirmEmail){
-            alert(
-                "Email and confirm Email fields much match. Please check again"
-            );
+        setError("");
+        if (email !== confirmEmail) {
+            setError("Email and confirm email fields must match.");
             return;
         }
-        const data = { email, password, userName, firstName, lastName }
-        const response = await makeUnauthenticatedPOSTRequest(
-            "/auth/register",
-            data
-        );
-        if (response && !response.err && !response.error) {
-            const token = response.token;
-            const date = new Date();
-            date.setDate(date.getDate() + 30);
-            setCookie("token", token, {path: "/" , expires: date});
-            alert("Success");
-            navigate("/home");
-
-        } else {
-            alert(response?.err || response?.error || "Registration failed");
+        setLoading(true);
+        try {
+            const data = {email, password, userName, firstName, lastName};
+            const response = await makeUnauthenticatedPOSTRequest(
+                "/auth/register",
+                data
+            );
+            if (response && !response.err && !response.error) {
+                const token = response.token;
+                const date = new Date();
+                date.setDate(date.getDate() + 30);
+                setCookie("token", token, {path: "/", expires: date});
+                navigate("/home");
+            } else {
+                setError(response?.err || response?.error || "Registration failed");
+            }
+        } catch (e) {
+            setError("Network error. Is the backend running?");
         }
-
+        setLoading(false);
     };
 
     return (
-        <>
-    <div className='w-full h-full flex flex-col  items-center'>
-            <div className="logo p-5 border-b border-solid border-gray-300 w-full flex justify-center">
-                 <Icon icon="logos:spotify" width="150" />
+        <div className="w-full h-full flex flex-col items-center min-h-screen bg-[#121212]">
+            <div className="logo p-6 w-full flex justify-start bg-black">
+                <Icon icon="logos:spotify" width="110" />
             </div>
-        <div className='InputRegion w-1/3 py-10 flex items-center justify-center flex-col'>
-
-            <div className='font-bold mb-4'>Sign up for free  to start listening.</div>
-            <TextInput 
-                label="Email address" 
-                placeholder="Enter your Email address"
-                className="my-6"
-                value={email}
-                setValue={setEmail}
-            />
-            <TextInput 
-                label=" Confirm Email address" 
-                placeholder="Enter your Email again"
-                className="mb-6"
-                value={confirmEmail}
-                setValue={setConfirmEmail}
-            />
-            <TextInput 
-                label="Username" 
-                placeholder="Enter your Username"
-                className="mb-6"
-                
-                value={userName}
-                setValue={setUserName}
-            />
-            <PasswordInput
-                label="Create Password"
-                placeholder="Enter a strong Password here"
-                value={password}
-                setValue={setPassword}
-            />
-            <div className='w-full flex space-x-8'>
-                <TextInput 
-                label="First Name" 
-                placeholder="Enter your First Name"
-                className="my-6"
-                value={firstName}
-                setValue={setFirstName}
-            />
-            <TextInput 
-                label="Last Name" 
-                placeholder="Enter your Last Name"
-                className="my-6"
-                value={lastName}
-                setValue={setLastName}
-            />
-            </div>
-            <div className=' w-full flex items-center justify-center mt-6'>
-            <button className='bg-green-400 font-semibold p-3 px-10 rounded-full '
-                onClick={ (e) => {
-                    e.preventDefault();
-                    signUp();
-                    }
-                }
-            >
-                SIGN UP
-            </button>
-            </div>
-            <div className='w-full border border-solid border-gray-300 mt-5' ></div>
-            <div className='my-6 font-semibold text-lg'>
-                Already have an account?
-            </div>
-            <Link to="/login" className='w-full'>
-                <div className='border border-gray-500 text-gray-500 font-bold w-full rounded-full flex items-center justify-center py-4'>
-                    LOG IN FOR SPOTIFY
+            <div className="InputRegion w-full max-w-[700px] py-16 px-24 flex items-center justify-center flex-col bg-black rounded-lg mt-10 mb-10 pb-20">
+                <div className="font-display mb-10 text-4xl text-white font-bold text-center">
+                    Sign up for free to start listening.
                 </div>
-            </Link>
+                {error && (
+                    <div className="w-full bg-red-500 bg-opacity-20 border border-red-500 text-red-300 rounded-lg p-3 mb-4 text-sm">
+                        {error}
+                    </div>
+                )}
+                <TextInput
+                    label="Email address"
+                    placeholder="Enter your email address"
+                    className="my-3"
+                    value={email}
+                    setValue={setEmail}
+                    labelClassName="text-white"
+                />
+                <TextInput
+                    label="Confirm Email address"
+                    placeholder="Enter your email again"
+                    className="mb-3"
+                    value={confirmEmail}
+                    setValue={setConfirmEmail}
+                    labelClassName="text-white"
+                />
+                <TextInput
+                    label="Username"
+                    placeholder="Enter your username"
+                    className="mb-3"
+                    value={userName}
+                    setValue={setUserName}
+                    labelClassName="text-white"
+                />
+                <PasswordInput
+                    label="Create Password"
+                    placeholder="Enter a strong password"
+                    value={password}
+                    setValue={setPassword}
+                    labelClassName="text-white"
+                />
+                <div className="w-full flex space-x-4 mt-3">
+                    <TextInput
+                        label="First Name"
+                        placeholder="First Name"
+                        className="my-3"
+                        value={firstName}
+                        setValue={setFirstName}
+                        labelClassName="text-white"
+                    />
+                    <TextInput
+                        label="Last Name"
+                        placeholder="Last Name"
+                        className="my-3"
+                        value={lastName}
+                        setValue={setLastName}
+                        labelClassName="text-white"
+                    />
+                </div>
+                <div className="w-full flex items-center justify-center mt-8">
+                    <button
+                        className="bg-[#1ed760] hover:scale-105 hover:bg-[#1fdf64] text-black font-bold p-3 w-full rounded-full transition-all disabled:opacity-50"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            signUp();
+                        }}
+                        disabled={loading}
+                    >
+                        {loading ? "SIGNING UP..." : "SIGN UP"}
+                    </button>
+                </div>
+                <div className="w-full border border-solid border-gray-700 mt-6"></div>
+                <div className="my-6 font-semibold text-lg text-gray-300">
+                    Already have an account?
+                </div>
+                <Link to="/login" className="w-full">
+                    <div className="border border-gray-500 text-white font-bold w-full rounded-full flex items-center justify-center py-4 hover:border-white transition-colors">
+                        LOG IN INSTEAD
+                    </div>
+                </Link>
+            </div>
         </div>
-
-    </div>
-        </>
-);
-
-}; 
+    );
+};
 
 export default SignupComponent;
