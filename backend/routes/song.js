@@ -23,7 +23,7 @@ router.post("/create", passport.authenticate("jwt", {session : false}),
 router.get("/get/mysongs", passport.authenticate("jwt" , {session : false}) 
 , async (req, res) => {
     
-    const songs = await Song.find({ artist : req.user._id });
+    const songs = await Song.find({ artist : req.user._id }).populate("artist");
     return res.status(200).json({ data : songs });
 
 });
@@ -39,7 +39,7 @@ router.get("/get/artist/:artistId", passport.authenticate("jwt" , {session : fal
         return res.status(301).json( { err : "Artist does not exist" });
     }
 
-    const songs = await Song.find({ artist : artistId });
+    const songs = await Song.find({ artist : artistId }).populate("artist");
     return res.status(200).json({ data : songs });
 
 });
@@ -50,11 +50,8 @@ router.get(
     , async (req, res) => {
         const { songName } = req.params;
 
-    const song = await Song.find({ name : songName });
-    if( !song ) {
-        return res.status(301).json( { err : "Song does not exist" });
-    }
-    return res.status(200).json({ data : song });
+    const songs = await Song.find({ name : {$regex: songName, $options: "i"} }).populate("artist");
+    return res.status(200).json({ data : songs });
 });
 
 module.exports = router;
