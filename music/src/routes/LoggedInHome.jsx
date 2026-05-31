@@ -1,10 +1,5 @@
-import {useState} from "react";
-import {Howl, Howler} from "howler";
-import {Icon} from "@iconify/react";
-import spotify_logo from "../assets/images/spotify_logo_white.svg";
-import IconText from "../components/shared/IconText";
-import TextWithHover from "../components/shared/TextWithHover";
 import LoggedInContainer from "../containers/LoggedInContainer";
+import {Icon} from "@iconify/react";
 
 const focusCardsData = [
     {
@@ -65,27 +60,29 @@ const spotifyPlaylistsCardData = [
 const Home = () => {
     return (
         <LoggedInContainer curActiveScreen="home">
-            <PlaylistView titleText="Focus" cardsData={focusCardsData} />
-            <PlaylistView
-                titleText="Spotify Playlists"
-                cardsData={spotifyPlaylistsCardData}
-            />
-            <PlaylistView
-                titleText="Sound of India"
-                cardsData={focusCardsData}
-            />
+            <div className="flex flex-col gap-10 mt-2">
+                <PlaylistView titleText="Focus" cardsData={focusCardsData} />
+                <PlaylistView
+                    titleText="Spotify Playlists"
+                    cardsData={spotifyPlaylistsCardData}
+                />
+                <PlaylistView
+                    titleText="Sound of India"
+                    cardsData={focusCardsData}
+                />
+            </div>
         </LoggedInContainer>
     );
 };
 
 const PlaylistView = ({ titleText, cardsData }) => {
     return (
-        <div className="text-white mt-8">
-            <div className="text-2xl font-semibold mb-5">{titleText}</div>
-            <div className="w-full flex justify-between space-x-4">
+        <div className="text-white mt-4">
+            <div className="text-2xl font-semibold mb-5 hover:underline cursor-pointer">{titleText}</div>
+            <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
                 {cardsData.map((item, index) => (
                     <Card
-                        key={`${titleText}-${index}`} // ✅ Unique key
+                        key={`${titleText}-${index}`}
                         title={item.title}
                         description={item.description}
                         imgUrl={item.imgUrl}
@@ -99,12 +96,15 @@ const PlaylistView = ({ titleText, cardsData }) => {
 
 const Card = ({title, description, imgUrl}) => {
     return (
-        <div className="bg-black bg-opacity-40 w-1/5 p-4 rounded-lg">
-            <div className="pb-4 pt-2">
-                <img className="w-full rounded-md" src={imgUrl} alt="label" />
+        <div className="bg-[#181818] p-4 rounded-md hover:bg-[#282828] transition-all cursor-pointer group">
+            <div className="pb-4 pt-2 relative">
+                <img className="w-full rounded-md h-40 object-cover shadow-lg" src={imgUrl} alt={title} />
+                <div className="absolute right-4 bottom-6 bg-[#1db954] text-black w-12 h-12 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-xl hover:scale-105">
+                    <Icon icon="ic:baseline-play-arrow" fontSize={30} />
+                </div>
             </div>
-            <div className="text-white font-semibold py-3">{title}</div>
-            <div className="text-gray-500 text-sm">{description}</div>
+            <div className="text-white font-semibold py-1 truncate">{title}</div>
+            <div className="text-[#b3b3b3] text-sm line-clamp-2 mt-1">{description}</div>
         </div>
     );
 };
